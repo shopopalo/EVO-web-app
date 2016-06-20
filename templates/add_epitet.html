@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+
+{% block form %}
+	<form action="{{ url_for('add_epitet') }}" method="POST">
+		<input type="text" name="epitet">
+		<input type="submit" value="ADD">
+	</form>
+
+	{% for epitet in epitets %}
+		<div>{{epitet}}</div>
+	{% else %}
+		<div>Немає епітетів.</div>
+	{% endfor %}
+{% endblock %}

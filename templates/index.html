@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base.css') }}">
+</head>
+<body>
+	<div class="container">
+		<h2 id="message" class="element">{{welcome}}</h1>
+
+		{% block form %}
+		<form action="{{ url_for('compose_message') }}" method="POST" class="element">
+			<input type="text" name="name" id="name" placeholder="Введите имя" required>
+			<input type="submit" value="Клацни меня" id="btn" onclick="return sendData(this.form);">
+		</form>
+		{% endblock %}
+	</div>
+
+	<script type="text/javascript">
+	function sendData(form) {
+		var name = document.getElementById('name').value;
+		if (name === '') {
+			alert('Введите свое имя, ёмае!');
+			return;
+		}
+		var message = document.getElementById('message');
+		var xhr = new XMLHttpRequest();
+		xhr.open('post', form.action, true);
+		xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+		xhr.onload = function(e) {
+			var data = JSON.parse(xhr.responseText);
+			message.innerHTML = data["message"];
+		}.bind(this);
+		xhr.send(JSON.stringify(name));
+		return false;
+	}
+	</script>
+</body>
+</html>
