@@ -63,8 +63,6 @@ def compose_message():
 	name = request.json.lower()
 	# соединяемся с БД
 	db = get_db()
-	# количество эпитетов
-	count_epitets = len(db.execute('select id from epitets').fetchall())
 	try:
 		# пытаемся добавить новое имя в БД
 		curr = db.execute('insert into names (name) values (?)', [name])
@@ -84,6 +82,8 @@ def compose_message():
 			db.execute('update epitets set used=? where id=?', [1, epitet_id])
 			db.commit()
 		except IndexError:
+			# определяем общее количество эпитетов
+			count_epitets = len(db.execute('select id from epitets').fetchall())
 			# если все эпитеты уже использованы
 			# берем рандомное id эпитета
 			random_id = random.randint(0,count_epitets-1)
